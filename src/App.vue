@@ -42,7 +42,7 @@ const deleteData = (data: string) => {
 </script>
 
 <template>
-  <div class="m-8 max-w-screen-sm mx-auto">
+  <div class="p-4 max-w-max md:max-w-screen-sm mx-auto">
     <h1 class="text-4xl font-bold py-6">Todo List By Vue <img src="./assets/logo.svg" width="40" height="40"
         class="inline-block" /></h1>
     <TodoVue @save="insertData" />
