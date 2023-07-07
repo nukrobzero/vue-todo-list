@@ -1,36 +1,45 @@
-<script  lang="ts">
+<script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import TodoVue from './components/Todo.vue';
-
 import TodoList from './components/TodoList.vue';
-export default {
-  name: "App",
-  components: {
-    TodoVue,
-    TodoList
-  },
-  data() {
-    return {
-      message: []
-    }
 
-  },
-  methods: {
-    insertData(data: string) {
-      //@ts-ignore
-      this.message.push(data)
-    },
-    deleteData(id: any) {
-      this.message = this.message.filter(item => {
-        //@ts-ignore
-        return item.id !== id
-      })
-    }
+const message = ref<any[]>([]);
+
+// Load data from local storage on component mount
+onMounted(() => {
+  loadFromLocalStorage();
+});
+
+const saveToLocalStorage = () => {
+  localStorage.setItem('message', JSON.stringify(message.value));
+};
+
+const loadFromLocalStorage = () => {
+  const storedMessage = localStorage.getItem('message');
+  if (storedMessage) {
+    message.value = JSON.parse(storedMessage);
+  }
+};
+
+const insertData = (data: string) => {
+  message.value.push(data);
+  saveToLocalStorage();
+};
+
+const checkBoxValue = (data: string, value: boolean) => {
+  const item = message.value.find(item => item.data === data);
+  if (item) {
+    item.checked = value; // Update the 'checked' property of the item
+    saveToLocalStorage();
   }
 }
 
+const deleteData = (data: string) => {
+  message.value = message.value.filter(item => item !== data);
+  saveToLocalStorage();
+};
 
 </script>
-
 
 <template>
   <div class="m-8 max-w-screen-sm mx-auto">
@@ -38,7 +47,7 @@ export default {
         class="inline-block" /></h1>
     <TodoVue @save="insertData" />
     <div v-if="message.length > 0" class="mt-10">
-      <TodoList :message="message" @delete="deleteData" />
+      <TodoList :message="message" @checked="checkBoxValue" @delete="deleteData" />
     </div>
   </div>
 </template>
