@@ -21,7 +21,8 @@ const checked = (data: string, value: boolean) => {
         <ul>
             <li v-for="(item, idx) in props.message" :key="idx" class="p-4 shadow-lg flex justify-between">
                 <span class="flex items-center justify-center mr-6">
-                    <input type="checkbox" v-model="item.checked" @change="checked(item.data, item.checked)" class="mr-2" />
+                    <input type="checkbox" v-model.trim="item.checked" @change="checked(item.data, item.checked)"
+                        class="mr-2" />
                     <p :class="{ 'line-through': item.checked }" class="break-all">{{ item.data }}</p>
                 </span>
                 <button @click="deleteMessage(item)" class="text-red-700 hover:text-red-500">
